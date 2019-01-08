@@ -1,2 +1,2 @@
-# gcf
-game configuration file tools
+# gsc
+game setting configuration file tools
