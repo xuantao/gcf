@@ -1,0 +1,163 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Gsc",
+	"patterns": [
+		{"include": "#keywords"},
+		{"include": "#strings"},
+		{"include": "#comments"},
+		{"include": "#line_continuation_character"},
+		{"include": "#numbers"},
+		{
+			"begin": "^\\s*((#)\\s*(include))\\b\\s*",
+			"beginCaptures": {
+				"1": {"name": "keyword.control.directive.$3.gsc"},
+				"2": {"name": "punctuation.definition.directive.gsc"}
+			},
+			"end": "(?=(?://|/\\*))|(?<!\\\\)(?=\\n)",
+			"name": "preprocessor.include.gsc",
+			"patterns": [
+				{"include": "#line_continuation_character"},
+				{
+					"begin": "\"",
+					"beginCaptures": {
+						"0": {"name": "punctuation.definition.string.begin.gsc"}
+					},
+					"end": "\"",
+					"endCaptures": {
+						"0": {"name": "punctuation.definition.string.end.gsc"}
+					},
+					"name": "string.quoted.double.include.gsc"
+				},
+				{
+					"begin": "<",
+					"beginCaptures": {
+						"0": {"name": "punctuation.definition.string.begin.gsc"}
+					},
+					"end": ">",
+					"endCaptures": {
+						"0": {"name": "punctuation.definition.string.end.gsc"}
+					},
+					"name": "string.quoted.other.lt-gt.include.gsc"
+				}
+			]
+		},
+		{
+			"match": "(\\[)|(\\])",
+			"captures": {
+				"1": {"name": "punctuation.definition.begin.bracket.square.gsc"},
+				"2": {"name": "punctuation.definition.end.bracket.square.gsc"}
+			}
+		},
+		{"match": ";", "name": "punctuation.terminator.statement.gsc"},
+		{"match": ",", "name": "punctuation.separator.delimiter.gsc"}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{"name": "keyword.control.gsc",		"match": "\\b(const)\\b"},
+				{"name": "storage.type.gsc", 		"match": "\\b(void|byte|bool|int|long|float|double|string)\\b"},
+				{"name": "storage.modifier.gsc",	"match": "\\b(enum|struct|namespace|table)\\b"},
+				{"name": "constant.var.gsc", 		"match": "\\b(true|false)\\b"}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.gsc",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.gsc",
+					"match": "\\\\."
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"captures": {
+						"1": {
+							"name": "meta.toc-list.banner.block.gsc"
+						}
+					},
+					"match": "^/\\* =(\\s*.*?)\\s*= \\*/$\\n?",
+					"name": "comment.block.gsc"
+				},
+				{
+					"begin": "/\\*",
+					"beginCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.begin.gsc"
+						}
+					},
+					"end": "\\*/",
+					"endCaptures": {
+						"0": {
+							"name": "punctuation.definition.comment.end.gsc"
+						}
+					},
+					"name": "comment.block.gsc"
+				},
+				{
+					"match": "\\*/.*\\n",
+					"name": "invalid.illegal.stray-comment-end.gsc"
+				},
+				{
+					"captures": {
+						"1": {
+							"name": "meta.toc-list.banner.line.gsc"
+						}
+					},
+					"match": "^// =(\\s*.*?)\\s*=\\s*$\\n?",
+					"name": "comment.line.banner.gsc"
+				},
+				{
+					"begin": "(^[ \\t]+)?(?=//)",
+					"beginCaptures": {
+						"1": {
+							"name": "punctuation.whitespace.comment.leading.gsc"
+						}
+					},
+					"end": "(?!\\G)",
+					"patterns": [
+						{
+							"begin": "//",
+							"beginCaptures": {
+								"0": {
+									"name": "punctuation.definition.comment.gsc"
+								}
+							},
+							"end": "(?=\\n)",
+							"name": "comment.line.double-slash.gsc",
+							"patterns": [
+								{
+									"include": "#line_continuation_character"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		"line_continuation_character": {
+			"patterns": [
+				{
+					"match": "(\\\\)\\n",
+					"captures": {
+						"1": {
+							"name": "constant.character.escape.line-continuation.gsc"
+						}
+					}
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"match": "\\b((0(x|X)[0-9a-fA-F]([0-9a-fA-F']*[0-9a-fA-F])?)|(0(b|B)[01]([01']*[01])?)|(([0-9]([0-9']*[0-9])?\\.?[0-9]*([0-9']*[0-9])?)|(\\.[0-9]([0-9']*[0-9])?))((e|E)(\\+|-)?[0-9]([0-9']*[0-9])?)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b",
+					"name": "constant.numeric.gsc"
+				}
+			]
+		}
+	},
+	"scopeName": "source.gsc"
+}
