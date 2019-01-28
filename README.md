@@ -1,2 +1,2 @@
 # gsc
-game setting configuration file tools
+game setting file tools
