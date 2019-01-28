@@ -1,2 +1,2 @@
-# gsc
+# gsf
 game setting file tools
